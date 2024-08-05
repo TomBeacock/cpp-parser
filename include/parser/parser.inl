@@ -15,7 +15,7 @@ inline bool Parser<T, U>::Parser::is_eof() const
 template <typename T, typename U>
 inline Char Parser<T, U>::get_current() const
 {
-    return this->data[i];
+    return this->data[this->current_index];
 }
 
 template <typename T, typename U>
@@ -39,9 +39,9 @@ inline void Parser<T, U>::remove_save()
 template <typename T, typename U>
 inline void Parser<T, U>::load_save()
 {
-    size_t i = this->saved_indices.top();
+    size_t save_index = this->saved_indices.top();
     this->saved_indices.pop();
-    this->current_index = i;
+    this->current_index = save_index;
 }
 
 template <typename T, typename U>
