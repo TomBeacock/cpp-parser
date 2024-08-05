@@ -7,7 +7,7 @@ inline Parser<T, U>::Parser(std::string_view data)
 {}
 
 template <typename T, typename U>
-inline bool Parser<T, U>::Parser::is_eof() const
+inline bool Parser<T, U>::is_eof() const
 {
     return this->current_index >= data.size();
 }
