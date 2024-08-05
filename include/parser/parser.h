@@ -29,8 +29,8 @@ class Parser {
     inline Char get_current() const;
     inline void move_next();
 
-    inline void new_save();
-    inline void remove_save();
+    inline void push_save();
+    inline void pop_save();
     inline void load_save();
     inline size_t get_save_length();
     inline std::string_view get_save_string();

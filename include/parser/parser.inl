@@ -25,13 +25,13 @@ inline void Parser<T, U>::move_next()
 }
 
 template <typename T, typename U>
-inline void Parser<T, U>::new_save()
+inline void Parser<T, U>::push_save()
 {
     this->saved_indices.push(this->current_index);
 }
 
 template <typename T, typename U>
-inline void Parser<T, U>::remove_save()
+inline void Parser<T, U>::pop_save()
 {
     this->saved_indices.pop();
 }
