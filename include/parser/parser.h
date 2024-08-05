@@ -8,10 +8,7 @@
 namespace CppParser {
 /**
  * @brief Base class for creating a parser.
- * @tparam T The resulting type after parsing.
- * @tparam U The success/failure response type.
  */
-template <typename T, typename U = bool>
 class Parser {
   public:
     Parser(Parser &parser) = delete;
@@ -19,8 +16,6 @@ class Parser {
 
     Parser &operator=(const Parser &parser) = delete;
     Parser &operator=(const Parser &&parser) = delete;
-
-    virtual U parse(T &out) = 0;
 
   protected:
     Parser(std::string_view data);

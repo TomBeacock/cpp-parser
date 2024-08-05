@@ -1,64 +1,51 @@
 #include "parser.h"
 namespace CppParser {
-template <typename T, typename U>
-inline Parser<T, U>::Parser(std::string_view data)
-    : data(data),
-      current_index(0)
-{}
+inline Parser::Parser(std::string_view data) : data(data), current_index(0) {}
 
-template <typename T, typename U>
-inline bool Parser<T, U>::is_eof() const
+inline bool Parser::is_eof() const
 {
     return this->current_index >= data.size();
 }
 
-template <typename T, typename U>
-inline Char Parser<T, U>::get_current() const
+inline Char Parser::get_current() const
 {
     return this->data[this->current_index];
 }
 
-template <typename T, typename U>
-inline void Parser<T, U>::move_next()
+inline void Parser::move_next()
 {
     this->current_index++;
 }
 
-template <typename T, typename U>
-inline void Parser<T, U>::push_save()
+inline void Parser::push_save()
 {
     this->saved_indices.push(this->current_index);
 }
 
-template <typename T, typename U>
-inline void Parser<T, U>::pop_save()
+inline void Parser::pop_save()
 {
     this->saved_indices.pop();
 }
 
-template <typename T, typename U>
-inline void Parser<T, U>::load_save()
+inline void Parser::load_save()
 {
     size_t save_index = this->saved_indices.top();
     this->saved_indices.pop();
     this->current_index = save_index;
 }
 
-template <typename T, typename U>
-inline size_t Parser<T, U>::get_save_length()
+inline size_t Parser::get_save_length()
 {
     return this->current_index - saved_indices.top();
 }
 
-template <typename T, typename U>
-inline std::string_view Parser<T, U>::get_save_string()
+inline std::string_view Parser::get_save_string()
 {
     size_t save_index = saved_indices.top();
     return std::string_view(&this->data[save_index], get_save_length());
 }
 
-template <typename T, typename U>
-inline bool Parser<T, U>::require(Char c)
+inline bool Parser::require(Char c)
 {
     if (is_eof() || get_current() != c) {
         return false;
@@ -67,8 +54,7 @@ inline bool Parser<T, U>::require(Char c)
     return true;
 }
 
-template <typename T, typename U>
-inline bool Parser<T, U>::require(std::string_view str)
+inline bool Parser::require(std::string_view str)
 {
     for (Char c : str) {
         if (!require(c)) {
@@ -78,8 +64,7 @@ inline bool Parser<T, U>::require(std::string_view str)
     return true;
 }
 
-template <typename T, typename U>
-inline bool Parser<T, U>::get_whitespace()
+inline bool Parser::get_whitespace()
 {
     while (!is_eof() && (get_current() == ' ' || get_current() == '\t')) {
         move_next();
@@ -87,8 +72,7 @@ inline bool Parser<T, U>::get_whitespace()
     return true;
 }
 
-template <typename T, typename U>
-bool Parser<T, U>::get_digit(Nat8 &out_digit)
+bool Parser::get_digit(Nat8 &out_digit)
 {
     if (is_eof() || !in_bounds('0', '9')) {
         return false;
@@ -98,8 +82,7 @@ bool Parser<T, U>::get_digit(Nat8 &out_digit)
     return true;
 }
 
-template <typename T, typename U>
-bool Parser<T, U>::get_hex_digit(Nat8 &out_digit)
+bool Parser::get_hex_digit(Nat8 &out_digit)
 {
     if (is_eof()) {
         return false;
@@ -117,14 +100,12 @@ bool Parser<T, U>::get_hex_digit(Nat8 &out_digit)
     return true;
 }
 
-template <typename T, typename U>
-inline bool Parser<T, U>::is_equal(Char c)
+inline bool Parser::is_equal(Char c)
 {
     return get_current() == c;
 }
 
-template <typename T, typename U>
-inline bool Parser<T, U>::in_bounds(Char min, Char max)
+inline bool Parser::in_bounds(Char min, Char max)
 {
     return get_current() >= min && get_current() <= max;
 }
