@@ -32,7 +32,8 @@ class Parser {
     inline void new_save();
     inline void remove_save();
     inline void load_save();
-    inline size_t save_length();
+    inline size_t get_save_length();
+    inline std::string_view get_save_string();
 
     inline bool require(Char c);
     inline bool require(std::string_view str);

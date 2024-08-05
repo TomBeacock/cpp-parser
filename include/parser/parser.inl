@@ -45,9 +45,16 @@ inline void Parser<T, U>::load_save()
 }
 
 template <typename T, typename U>
-inline size_t Parser<T, U>::save_length()
+inline size_t Parser<T, U>::get_save_length()
 {
     return this->current_index - saved_indices.top();
+}
+
+template <typename T, typename U>
+inline std::string_view Parser<T, U>::get_save_string()
+{
+    size_t save_index = saved_indices.top();
+    return std::string_view(&this->data[save_index], get_save_length());
 }
 
 template <typename T, typename U>
