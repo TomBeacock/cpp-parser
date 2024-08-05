@@ -12,8 +12,8 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(cpp-types)
 
-add_library(cpp-parser INTERFACE)
+add_library(cpp-parser STATIC "include/parser/parser.h" "src/parser.cpp")
 
-target_include_directories(cpp-parser INTERFACE "include")
-target_link_libraries(cpp-parser INTERFACE cpp-types)
-target_compile_features(cpp-parser INTERFACE cxx_std_20)
+set_target_properties(cpp-parser PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
+target_include_directories(cpp-parser PUBLIC "include")
+target_link_libraries(cpp-parser PUBLIC cpp-types)
