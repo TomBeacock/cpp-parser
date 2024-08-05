@@ -118,6 +118,12 @@ bool Parser<T, U>::get_hex_digit(Nat8 &out_digit)
 }
 
 template <typename T, typename U>
+inline bool Parser<T, U>::is_equal(Char c)
+{
+    return get_current() == c;
+}
+
+template <typename T, typename U>
 inline bool Parser<T, U>::in_bounds(Char min, Char max)
 {
     return get_current() >= min && get_current() <= max;

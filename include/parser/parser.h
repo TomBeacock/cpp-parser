@@ -42,6 +42,7 @@ class Parser {
     inline bool get_digit(Nat8 &out_digit);
     inline bool get_hex_digit(Nat8 &out_digit);
 
+    inline bool is_equal(Char c);
     inline bool in_bounds(Char min, Char max);
 
   private:
