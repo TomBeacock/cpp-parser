@@ -28,7 +28,7 @@ class Parser {
 
     inline void push_save();
     inline void pop_save();
-    inline void load_save();
+    inline void load_save(bool pop = true);
     inline size_t get_save_length();
     inline std::string_view get_save_string();
 
@@ -74,11 +74,13 @@ inline void Parser::pop_save()
     this->saved_indices.pop();
 }
 
-inline void Parser::load_save()
+inline void Parser::load_save(bool pop)
 {
     size_t save_index = this->saved_indices.top();
-    this->saved_indices.pop();
     this->current_index = save_index;
+    if (pop) {
+        this->saved_indices.pop();
+    }
 }
 
 inline size_t Parser::get_save_length()
