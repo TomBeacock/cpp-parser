@@ -56,6 +56,57 @@ Bool Parser::get_hex_digit(Nat8 &out_digit)
     return true;
 }
 
+Bool Parser::get_int(Int &out_int)
+{
+    push_save();
+    Bool neg = require('-');
+    Nat8 digit;
+    if (!get_digit(digit)) {
+        load_save();
+        return false;
+    }
+    Int integral_part = static_cast<Int>(digit) * (neg ? -1 : 1);
+    if (digit != 0) {
+        while (get_digit(digit)) {
+            integral_part = integral_part * 10 + digit;
+        }
+    }
+    out_int = integral_part;
+    pop_save();
+    return true;
+}
+
+Bool Parser::get_float(Float &out_float)
+{
+    push_save();
+    Bool neg = require('-');
+    Nat8 digit;
+    if (!get_digit(digit)) {
+        load_save();
+        return false;
+    }
+    Int integral_part = static_cast<Float>(digit) * (neg ? -1 : 1);
+    if (digit != 0) {
+        while (get_digit(digit)) {
+            integral_part = integral_part * 10 + digit;
+        }
+    }
+    Float fractional_part = 0.0f;
+    if (require('.')) {
+        if (!get_digit(digit)) {
+            load_save();
+            return false;
+        }
+        fractional_part = static_cast<Float>(digit) / 10;
+        while (get_digit(digit)) {
+            fractional_part = (fractional_part + digit) / 10;
+        }
+    }
+    out_float = integral_part + fractional_part;
+    pop_save();
+    return true;
+}
+
 Bool Parser::get_number(std::variant<Int, Float> &out_number)
 {
     push_save();

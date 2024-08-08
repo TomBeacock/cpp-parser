@@ -39,6 +39,8 @@ class Parser {
     Bool get_whitespace();
     Bool get_digit(Nat8 &out_digit);
     Bool get_hex_digit(Nat8 &out_digit);
+    Bool get_int(Int &out_int);
+    Bool get_float(Float &out_float);
     Bool get_number(std::variant<Int, Float> &out_number);
 
   private:
