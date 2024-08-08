@@ -4,6 +4,7 @@
 
 #include <stack>
 #include <string>
+#include <variant>
 
 namespace Parsing {
 /**
@@ -20,24 +21,25 @@ class Parser {
   protected:
     Parser(std::string_view data);
 
-    inline bool is_eof() const;
+    inline Bool is_eof() const;
     inline Char get_current() const;
     inline void move_next();
-    inline bool is_equal(Char c) const;
-    inline bool in_bounds(Char min, Char max) const;
+    inline Bool is_equal(Char c) const;
+    inline Bool in_bounds(Char min, Char max) const;
 
     inline void push_save();
     inline void pop_save();
-    inline void load_save(bool pop = true);
+    inline void load_save(Bool pop = true);
     inline size_t get_save_length();
     inline std::string_view get_save_string();
 
-    bool require(Char c);
-    bool require(std::string_view str);
+    Bool require(Char c);
+    Bool require(std::string_view str);
 
-    bool get_whitespace();
-    bool get_digit(Nat8 &out_digit);
-    bool get_hex_digit(Nat8 &out_digit);
+    Bool get_whitespace();
+    Bool get_digit(Nat8 &out_digit);
+    Bool get_hex_digit(Nat8 &out_digit);
+    Bool get_number(std::variant<Int, Float> &out_number);
 
   private:
     std::string_view data;
@@ -49,7 +51,7 @@ class Parser {
 namespace Parsing {
 inline Parser::Parser(std::string_view data) : data(data), current_index(0) {}
 
-inline bool Parser::is_eof() const
+inline Bool Parser::is_eof() const
 {
     return this->current_index >= data.size();
 }
@@ -74,7 +76,7 @@ inline void Parser::pop_save()
     this->saved_indices.pop();
 }
 
-inline void Parser::load_save(bool pop)
+inline void Parser::load_save(Bool pop)
 {
     size_t save_index = this->saved_indices.top();
     this->current_index = save_index;
@@ -94,12 +96,12 @@ inline std::string_view Parser::get_save_string()
     return std::string_view(&this->data[save_index], get_save_length());
 }
 
-inline bool Parser::is_equal(Char c) const
+inline Bool Parser::is_equal(Char c) const
 {
     return get_current() == c;
 }
 
-inline bool Parser::in_bounds(Char min, Char max) const
+inline Bool Parser::in_bounds(Char min, Char max) const
 {
     return get_current() >= min && get_current() <= max;
 }

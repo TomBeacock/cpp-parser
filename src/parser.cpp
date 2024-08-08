@@ -1,7 +1,7 @@
 #include "parser/parser.h"
 
 namespace Parsing {
-bool Parser::require(Char c)
+Bool Parser::require(Char c)
 {
     if (is_eof() || get_current() != c) {
         return false;
@@ -10,7 +10,7 @@ bool Parser::require(Char c)
     return true;
 }
 
-bool Parser::require(std::string_view str)
+Bool Parser::require(std::string_view str)
 {
     for (Char c : str) {
         if (!require(c)) {
@@ -20,7 +20,7 @@ bool Parser::require(std::string_view str)
     return true;
 }
 
-bool Parser::get_whitespace()
+Bool Parser::get_whitespace()
 {
     while (!is_eof() && (get_current() == ' ' || get_current() == '\t')) {
         move_next();
@@ -28,7 +28,7 @@ bool Parser::get_whitespace()
     return true;
 }
 
-bool Parser::get_digit(Nat8 &out_digit)
+Bool Parser::get_digit(Nat8 &out_digit)
 {
     if (is_eof() || !in_bounds('0', '9')) {
         return false;
@@ -38,7 +38,7 @@ bool Parser::get_digit(Nat8 &out_digit)
     return true;
 }
 
-bool Parser::get_hex_digit(Nat8 &out_digit)
+Bool Parser::get_hex_digit(Nat8 &out_digit)
 {
     if (is_eof()) {
         return false;
@@ -53,6 +53,46 @@ bool Parser::get_hex_digit(Nat8 &out_digit)
         return false;
     }
     move_next();
+    return true;
+}
+
+Bool Parser::get_number(std::variant<Int, Float> &out_number)
+{
+    push_save();
+    Bool neg = require('-');
+    Nat8 digit;
+    if (!get_digit(digit)) {
+        load_save();
+        return false;
+    }
+    Int integral_part = static_cast<Int>(digit) * (neg ? -1 : 1);
+    if (digit != 0) {
+        while (get_digit(digit)) {
+            integral_part = integral_part * 10 + digit;
+        }
+    }
+    Bool is_float = false;
+    Float fractional_part = 0.0f;
+    if (require('.')) {
+        is_float = true;
+        if (!get_digit(digit)) {
+            load_save();
+            return false;
+        }
+        fractional_part = static_cast<Float>(digit) / 10;
+        while (get_digit(digit)) {
+            fractional_part = (fractional_part + digit) / 10;
+        }
+    }
+
+    if (is_float) {
+        Float number = static_cast<Float>(integral_part);
+        number += fractional_part;
+        out_number = number;
+    } else {
+        out_number = integral_part;
+    }
+    pop_save();
     return true;
 }
 }  // namespace Parsing
