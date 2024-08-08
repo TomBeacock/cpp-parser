@@ -76,6 +76,25 @@ Bool Parser::get_int(Int &out_int)
     return true;
 }
 
+Bool Parser::get_nat(Nat &out_nat)
+{
+    push_save();
+    Nat8 digit;
+    if (!get_digit(digit)) {
+        load_save();
+        return false;
+    }
+    Nat num = static_cast<Nat>(digit);
+    if (digit != 0) {
+        while (get_digit(digit)) {
+            num = num * 10 + digit;
+        }
+    }
+    out_nat = num;
+    pop_save();
+    return true;
+}
+
 Bool Parser::get_float(Float &out_float)
 {
     push_save();
