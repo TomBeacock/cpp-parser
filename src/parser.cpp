@@ -116,10 +116,13 @@ Bool Parser::get_float(Float &out_float)
             load_save();
             return false;
         }
-        fractional_part = static_cast<Float>(digit) / 10;
+        Int fractional = static_cast<Int>(digit);
+        Float div = 0.1f;
         while (get_digit(digit)) {
-            fractional_part = (fractional_part + digit) / 10;
+            fractional = fractional * 10 + digit;
+            div /= 10;
         }
+        fractional_part = static_cast<Float>(fractional) * div;
     }
     out_float = integral_part + fractional_part;
     pop_save();
@@ -149,10 +152,13 @@ Bool Parser::get_number(std::variant<Int, Float> &out_number)
             load_save();
             return false;
         }
-        fractional_part = static_cast<Float>(digit) / 10;
+        Int fractional = static_cast<Int>(digit);
+        Float div = 0.1f;
         while (get_digit(digit)) {
-            fractional_part = (fractional_part + digit) / 10;
+            fractional = fractional * 10 + digit;
+            div /= 10;
         }
+        fractional_part = static_cast<Float>(fractional) * div;
     }
 
     if (is_float) {
