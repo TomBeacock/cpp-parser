@@ -27,6 +27,7 @@ class Parser {
     inline Bool in_bounds(Char min, Char max) const;
 
     inline void move_next();
+    inline void move_forward(Size amount);
     inline Size get_remaining() const;
 
     inline void push_save();
@@ -79,6 +80,11 @@ inline Bool Parser::in_bounds(Char min, Char max) const
 inline void Parser::move_next()
 {
     this->current_index++;
+}
+
+inline void Parser::move_forward(Size amount)
+{
+    this->current_index += amount;
 }
 
 inline Size Parser::get_remaining() const
