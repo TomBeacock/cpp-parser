@@ -104,7 +104,7 @@ Bool Parser::get_float(Float &out_float)
         load_save();
         return false;
     }
-    Int integral_part = static_cast<Float>(digit) * (neg ? -1 : 1);
+    Int integral_part = static_cast<Int>(digit) * (neg ? -1 : 1);
     if (digit != 0) {
         while (get_digit(digit)) {
             integral_part = integral_part * 10 + digit;
@@ -124,7 +124,7 @@ Bool Parser::get_float(Float &out_float)
         }
         fractional_part = static_cast<Float>(fractional) * div;
     }
-    out_float = integral_part + fractional_part;
+    out_float = static_cast<Float>(integral_part) + fractional_part;
     pop_save();
     return true;
 }
